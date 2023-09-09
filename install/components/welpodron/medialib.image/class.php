@@ -10,6 +10,7 @@ use Bitrix\Main\Application;
 use Bitrix\Main\FileTable;
 use Bitrix\Main\IO\Path;
 use Bitrix\Main\Loader;
+use Welpodron\Image\Utils\Converter;
 
 class WelpodronMedialibImage extends CBitrixComponent
 {
@@ -73,6 +74,10 @@ class WelpodronMedialibImage extends CBitrixComponent
     public function getImage()
     {
         try {
+            if (!Loader::includeModule('welpodron.image')) {
+                return;
+            }
+
             if (strpos($this->arParams['FILE'], 'iblock') !== false || strpos($this->arParams['FILE'], 'medialibrary') !== false) {
                 // Вероятнее всего файл был загружен через инфоблок или медиабиблиотеку
                 $file = FileTable::getList([
@@ -84,6 +89,8 @@ class WelpodronMedialibImage extends CBitrixComponent
                         'ID',
                         'WIDTH',
                         'HEIGHT',
+                        'SUBDIR',
+                        'FILE_NAME',
                     ],
                     'limit' => 1
                 ])->fetch();
@@ -91,6 +98,7 @@ class WelpodronMedialibImage extends CBitrixComponent
                 if ($file) {
                     if ($this->arParams['RESIZE_USE'] && in_array($this->arParams['RESIZE_TYPE'], self::SUPPORTED_RESIZE_TYPES)) {
                         if ($this->arParams['RESIZE_WIDTH'] && $this->arParams['RESIZE_HEIGHT']) {
+                            //! TODO: Switch to new API  
                             $resizedFile = \CFile::ResizeImageGet(
                                 $file['ID'],
                                 [
@@ -132,13 +140,13 @@ class WelpodronMedialibImage extends CBitrixComponent
             $file = new File($absolutePath);
 
             if (!$file->isExists()) {
-                return null;
+                return;
             }
 
             $contentType = $file->getContentType();
 
             if (!in_array($contentType, self::SUPPORTED_IMAGE_TYPES)) {
-                return null;
+                return;
             }
 
             $imgDimensions = getimagesize($absolutePath);
@@ -152,7 +160,6 @@ class WelpodronMedialibImage extends CBitrixComponent
                 'IMG_CLASS' => $this->arParams['IMG_CLASS'],
             ];
         } catch (\Throwable $th) {
-            return null;
         }
     }
 }

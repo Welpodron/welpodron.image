@@ -1,7 +1,15 @@
 <?
+
+use Bitrix\Main\Loader;
+
 CJSCore::RegisterExt('welpodron.image', [
-    'js' => '/local/modules/welpodron.image/js/lazy/verlok/script.js',
+    'js' => '/bitrix/js/welpodron.image/script.js',
     'skip_core' => true
 ]);
 
-CJSCore::Init(['welpodron.image']);
+Loader::registerAutoLoadClasses(
+    'welpodron.image',
+    [
+        'Welpodron\Image\Utils\Converter' => 'lib/utils/converter.php',
+    ]
+);

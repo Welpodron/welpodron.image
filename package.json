@@ -1,0 +1,26 @@
+{
+  "name": "welpodron.image",
+  "version": "1.0.0",
+  "description": "Данный модуль предназначен для работы с изображениями:\r - конвертация изображений в формат [WebP](https://en.wikipedia.org/wiki/WebP) и [AVIF](https://en.wikipedia.org/wiki/AVIF)\r - ленивая загрузка изображений (с использованием библиотеки [verlok/vanilla-lazyload](https://github.com/verlok/vanilla-lazyload))\r - удобная загрузка изображений из медиабиблиотеки и файловой структуры (компонент `welpodron:medialib.image`)",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "minify": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Welpodron/welpodron.image.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Welpodron/welpodron.image/issues"
+  },
+  "homepage": "https://github.com/Welpodron/welpodron.image#readme",
+  "devDependencies": {
+    "uglify-js": "^3.17.4"
+  }
+}

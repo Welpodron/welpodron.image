@@ -6,14 +6,19 @@ use Bitrix\Main\Application;
 
 class welpodron_image extends CModule
 {
+    var $MODULE_ID = 'welpodron.image';
+
     public function InstallFiles()
     {
         global $APPLICATION;
 
         try {
-            // На данный момент папка перемещается в local пространство
-            if (!CopyDirFiles(__DIR__ . '/components/', Application::getDocumentRoot() . '/local/components', true, true)) {
+            if (!CopyDirFiles(__DIR__ . '/components/', Application::getDocumentRoot() . '/bitrix/components', true, true)) {
                 $APPLICATION->ThrowException('Не удалось скопировать компоненты');
+                return false;
+            };
+            if (!CopyDirFiles(__DIR__ . '/js/', Application::getDocumentRoot() . '/bitrix/js', true, true)) {
+                $APPLICATION->ThrowException('Не удалось скопировать js');
                 return false;
             };
         } catch (\Throwable $th) {
@@ -26,7 +31,8 @@ class welpodron_image extends CModule
 
     public function UnInstallFiles()
     {
-        Directory::deleteDirectory(Application::getDocumentRoot() . '/local/components/welpodron/medialib.image');
+        Directory::deleteDirectory(Application::getDocumentRoot() . '/bitrix/components/welpodron/medialib.image');
+        Directory::deleteDirectory(Application::getDocumentRoot() . '/bitrix/js/welpodron.image');
     }
 
     public function DoInstall()
@@ -64,5 +70,11 @@ class welpodron_image extends CModule
         $this->MODULE_DESCRIPTION = 'Модуль для работы с изображениями';
         $this->PARTNER_NAME = 'Welpodron';
         $this->PARTNER_URI = 'https://github.com/Welpodron';
+
+        $arModuleVersion = [];
+        include(__DIR__ . "/version.php");
+
+        $this->MODULE_VERSION = $arModuleVersion["VERSION"];
+        $this->MODULE_VERSION_DATE = $arModuleVersion["VERSION_DATE"];
     }
 }
