@@ -21,6 +21,13 @@
   },
   "homepage": "https://github.com/Welpodron/welpodron.image#readme",
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.5",
+    "archiver": "^6.0.1",
+    "csso": "^5.0.5",
+    "rollup": "^4.6.1",
+    "rollup-plugin-esbuild": "^6.1.0",
+    "tslib": "^2.6.2",
     "uglify-js": "^3.17.4"
   }
 }

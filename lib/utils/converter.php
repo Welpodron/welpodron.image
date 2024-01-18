@@ -94,8 +94,8 @@ class Converter
 
             $originalType = $originalInfo->getFormat();
 
-            if ($originalType == Image::FORMAT_BMP) {
-                //! TODO: Implement BMP support 
+            if ($originalType == Image::FORMAT_BMP || $originalType == 'image/webp' || $originalType == 'image/avif') {
+                //! TODO: Implement BMP + Webp + Avif support 
                 return;
             }
 
@@ -271,6 +271,16 @@ class Converter
                 return;
             }
 
+            // fix to not convert wtf
+
+            if ($originalType == 'image/webp') {
+                return [
+                    'SRC' => $originalRelativePath,
+                    'SIZE' => $originalFile->getSize(),
+                    'CONTENT_TYPE' => $originalType,
+                ];
+            };
+
             $originalName = $originalFile->getName();
             $originalDir = str_replace($originalName, '', str_replace($this->uploadDirName . DIRECTORY_SEPARATOR, '', $originalRelativePath));
 
@@ -306,7 +316,7 @@ class Converter
                     imagepalettetotruecolor($im);
                     imagealphablending($im, true);
                     imagesavealpha($im, true);
-                } else {
+                } elseif ($originalType === 'image/jpeg' || $originalType === 'image/jpg') {
                     $im = imagecreatefromjpeg($originalAbsolutePath);
                 }
 
@@ -316,22 +326,30 @@ class Converter
                     if ($convertedType === 'webp') {
                         if (!imagewebp($im, $convertedAbsolutePath, $quality)) {
                             $convertedFile->delete();
+                            return;
                         }
                     } else {
                         if (!imageavif($im, $convertedAbsolutePath, $quality)) {
                             $convertedFile->delete();
+                            return;
                         }
                     }
 
                     imagedestroy($im);
-                }
-            }
 
-            return [
-                'SRC' => $convertedRelativePath,
-                'SIZE' => $convertedFile->getSize(),
-                'CONTENT_TYPE' => $convertedFile->getContentType(),
-            ];
+                    return [
+                        'SRC' => $convertedRelativePath,
+                        'SIZE' => $convertedFile->getSize(),
+                        'CONTENT_TYPE' => $convertedFile->getContentType(),
+                    ];
+                }
+            } else {
+                return [
+                    'SRC' => $convertedRelativePath,
+                    'SIZE' => $convertedFile->getSize(),
+                    'CONTENT_TYPE' => $convertedFile->getContentType(),
+                ];
+            }
         } catch (\Throwable $th) {
         }
     }

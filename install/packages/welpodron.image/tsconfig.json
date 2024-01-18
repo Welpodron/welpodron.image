@@ -1,0 +1,19 @@
+{
+    "include": ["./ts",],
+    "exclude": ["./types", "./es", "./cjs", "./iife"],
+    "compilerOptions": {
+        "rootDir": "ts",
+        "baseUrl": ".",
+        "declaration": true,
+        "declarationDir": "types",
+        "target": "ESNext",
+        "lib": ["DOM", "DOM.Iterable", "ESNext"],
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "emitDeclarationOnly": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "strict": true,
+    }
+}

@@ -2,8 +2,8 @@
 
 use Bitrix\Main\Loader;
 
-CJSCore::RegisterExt('welpodron.image', [
-    'js' => '/bitrix/js/welpodron.image/script.js',
+CJSCore::RegisterExt('welpodron.image.lz', [
+    'js' => '/local/packages/welpodron.image/iife/lz/index.js',
     'skip_core' => true
 ]);
 
