@@ -15,5 +15,6 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "strict": true,
+        "types": ["@testing-library/jest-dom"]
     }
 }

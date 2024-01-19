@@ -1,11 +1,8 @@
+import path from 'path';
+import fs from 'fs/promises';
+import UglifyJS from 'uglify-js';
+
 (async () => {
-  const fs = require('fs/promises');
-  const path = require('path');
-  const UglifyJS = require('uglify-js');
-  const csso = require('csso');
-
-  const MODULE_NAME = path.basename(__dirname);
-
   /** @type {Set<string>} */
   let files = new Set();
 
@@ -44,7 +41,7 @@
       )
     );
 
-  await walk(path.resolve(`./install/packages/${MODULE_NAME}/iife`), '.js');
+  await walk(path.resolve(`./iife`), '.js');
 
   /**
    * @param {string} file
@@ -214,49 +211,4 @@
   }
 
   await Promise.all(promises);
-
-  // files = new Set();
-
-  // await walk('./install/css', '.css');
-
-  // /**
-  //  * @param {string} file
-  //  * @returns Promise<void>
-  //  */
-  // const minifyCSSFile = async (file) => {
-  //   // Получить директорую файла
-  //   const dir = path.dirname(file);
-  //   // Получить имя файла без расширения
-  //   const fileName = path.basename(file, '.css');
-
-  //   const content = await fs.readFile(file, 'utf8');
-
-  //   const result = csso.minify(content, {
-  //     sourceMap: true,
-  //     filename: fileName + '.css',
-  //     comments: false,
-  //   });
-
-  //   // Сохранить минифицированный файл
-  //   await fs.writeFile(
-  //     path.join(dir, `${fileName}.min.css`),
-  //     result.css + `/*# sourceMappingURL=${fileName + '.min.css.map'} */`,
-  //     'utf8'
-  //   );
-
-  //   // Сохранить source map
-  //   await fs.writeFile(
-  //     path.join(dir, `${fileName}.min.css.map`),
-  //     result.map.toString(),
-  //     'utf8'
-  //   );
-  // };
-
-  // promises = [];
-
-  // for (let file of files) {
-  //   promises.push(minifyCSSFile(file));
-  // }
-
-  // await Promise.all(promises);
 })();

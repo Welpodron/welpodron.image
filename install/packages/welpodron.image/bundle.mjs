@@ -1,31 +1,26 @@
-import esbuild from 'rollup-plugin-esbuild';
 import path from 'path';
-import { rollup } from 'rollup';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
 import fs from 'fs/promises';
-import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const MODULE_NAME = path.basename(__dirname);
+import { rollup } from 'rollup';
+import esbuild from 'rollup-plugin-esbuild';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 (async () => {
   /** @type {import('rollup').RollupBuild | undefined} */
   let bundle;
 
   try {
-    await fs.rm(path.resolve(`./install/packages/${MODULE_NAME}`, 'es'), {
+    await fs.rm(`./es`, {
       recursive: true,
       force: true,
     });
 
-    await fs.rm(path.resolve(`./install/packages/${MODULE_NAME}`, 'cjs'), {
+    await fs.rm(`./cjs`, {
       recursive: true,
       force: true,
     });
 
-    await fs.rm(path.resolve(`./install/packages/${MODULE_NAME}`, 'iife'), {
+    await fs.rm(`./iife`, {
       recursive: true,
       force: true,
     });
@@ -33,7 +28,7 @@ const MODULE_NAME = path.basename(__dirname);
 
   /** @type {import('rollup').RollupOptions} */
   let inputOptions = {
-    input: path.resolve(`./install/packages/${MODULE_NAME}/ts/index.ts`),
+    input: `./ts/index.ts`,
     plugins: [
       nodeResolve({ extensions: ['.ts'] }),
       esbuild({
@@ -49,14 +44,14 @@ const MODULE_NAME = path.basename(__dirname);
     {
       format: 'es',
       entryFileNames: '[name].js',
-      dir: path.resolve(`./install/packages/${MODULE_NAME}`, 'es'),
+      dir: `./es`,
       preserveModules: true,
       sourcemap: true,
     },
     {
       format: 'cjs',
       entryFileNames: '[name].js',
-      dir: path.resolve(`./install/packages/${MODULE_NAME}`, 'cjs'),
+      dir: `./cjs`,
       preserveModules: true,
       sourcemap: true,
     },
@@ -66,12 +61,10 @@ const MODULE_NAME = path.basename(__dirname);
     bundle = await rollup(inputOptions);
     await Promise.all(outputs.map((output) => bundle.write(output)));
   } catch (error) {
-    // buildFailed = true;
     console.error(error);
   }
 
   if (bundle) {
-    // closes the bundle
     await bundle.close();
   }
 
@@ -114,7 +107,7 @@ const MODULE_NAME = path.basename(__dirname);
       )
     );
 
-  await walk(`./install/packages/${MODULE_NAME}/ts`, 'index.ts');
+  await walk(`./ts`, 'index.ts');
 
   for (let file of files) {
     const inputOptions = {
@@ -127,11 +120,9 @@ const MODULE_NAME = path.basename(__dirname);
           exclude: ['./types', './es', './cjs', './iife'],
         }),
       ],
-      external: ['welpodron.core'],
     };
     try {
       bundle = await rollup(inputOptions);
-      debugger;
       await bundle.write({
         format: 'iife',
         name: 'window.welpodron',
@@ -142,14 +133,11 @@ const MODULE_NAME = path.basename(__dirname);
           ext: 'js',
         }),
         sourcemap: true,
-        globals: { 'welpodron.core': 'window.welpodron' },
       });
     } catch (error) {
-      // buildFailed = true;
       console.error(error);
     }
     if (bundle) {
-      // closes the bundle
       await bundle.close();
     }
   }
