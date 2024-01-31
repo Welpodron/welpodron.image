@@ -120,6 +120,7 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
           exclude: ['./types', './es', './cjs', './iife'],
         }),
       ],
+      external: ['../utils', '../animate'],
     };
     try {
       bundle = await rollup(inputOptions);

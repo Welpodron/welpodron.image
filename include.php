@@ -2,6 +2,8 @@
 
 use Bitrix\Main\Loader;
 
+Loader::includeModule("welpodron.core");
+
 CJSCore::RegisterExt('welpodron.image.lz', [
     'js' => '/local/packages/welpodron.image/iife/lz/index.js',
     'skip_core' => true

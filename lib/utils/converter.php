@@ -385,6 +385,6 @@ class Converter
             return '<source srcset="' . $srcset['SRC'] . '" type="image/' . $type . '">';
         }
 
-        return '<source srcset="data:image/gif;base64,R0lGODlhAQABAID/AP///wAAACwAAAAAAQABAAACAkQBADs=" data-srcset="' . $srcset['SRC'] . '" type="image/' . $type . '">';
+        return '<source srcset="data:image/gif;base64,R0lGODlhAQABAID/AP///wAAACwAAAAAAQABAAACAkQBADs=" data-w-lz-srcset="' . $srcset['SRC'] . '" type="image/' . $type . '">';
     }
 }

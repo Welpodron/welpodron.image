@@ -111,8 +111,8 @@ import UglifyJS from 'uglify-js';
 
     // GENERIC
     content = content.replace(/supportedActions/g, 'spAc');
-    content = content.replace(/element/, 'el');
-    content = content.replace(/this.element/g, 'this.el');
+    // content = content.replace(/element/, 'el');
+    // content = content.replace(/this.element/g, 'this.el');
     content = content.replace(/\banimation\b/g, 'an');
     // HANDLERS
     content = content.replace(/handleDocumentKeyDown/g, 'hDKD');
