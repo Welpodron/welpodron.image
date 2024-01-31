@@ -13,12 +13,12 @@ class welpodron_image extends CModule
         global $APPLICATION;
 
         try {
-            if (!CopyDirFiles(__DIR__ . '/components/', Application::getDocumentRoot() . '/bitrix/components', true, true)) {
-                $APPLICATION->ThrowException('Не удалось скопировать компоненты');
+            if (!CopyDirFiles(__DIR__ . '/packages/', Application::getDocumentRoot() . '/local/packages', true, true)) {
+                $APPLICATION->ThrowException('Не удалось скопировать используемый модулем пакет');
                 return false;
             };
-            if (!CopyDirFiles(__DIR__ . '/js/', Application::getDocumentRoot() . '/bitrix/js', true, true)) {
-                $APPLICATION->ThrowException('Не удалось скопировать js');
+            if (!CopyDirFiles(__DIR__ . '/components/', Application::getDocumentRoot() . '/local/components', true, true)) {
+                $APPLICATION->ThrowException('Не удалось скопировать компоненты модуля');
                 return false;
             };
         } catch (\Throwable $th) {
@@ -31,8 +31,17 @@ class welpodron_image extends CModule
 
     public function UnInstallFiles()
     {
-        Directory::deleteDirectory(Application::getDocumentRoot() . '/bitrix/components/welpodron/medialib.image');
-        Directory::deleteDirectory(Application::getDocumentRoot() . '/bitrix/js/welpodron.image');
+        Directory::deleteDirectory(Application::getDocumentRoot() . '/local/packages/' . $this->MODULE_ID);
+
+        $arComponents = scandir(__DIR__ . '/components/welpodron');
+
+        if ($arComponents) {
+            $arComponents = array_diff($arComponents, ['..', '.']);
+
+            foreach ($arComponents as $component) {
+                Directory::deleteDirectory(Application::getDocumentRoot() . '/local/components/welpodron/' . $component);
+            }
+        }
     }
 
     public function DoInstall()
